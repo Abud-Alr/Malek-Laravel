@@ -2,17 +2,17 @@
     <main class="max-w-6xl mx-auto mt-10 lg:mt-20 space-y-6">
         <article class="max-w-4xl mx-auto lg:grid lg:grid-cols-12 gap-x-10">
             <div class="col-span-4 lg:text-center lg:pt-14 mb-10">
-                <img src="/images/{{ $post['image'] }}" alt="" class="rounded-xl">
+                <img src="/images/{{ $post->image }}" alt="{{ $post->title }}" class="rounded-xl">
 
                 <p class="mt-4 block text-gray-400 text-xs">
-                    Published <time>{{ $post['date'] }}</time>
+                    Published <time>{{ $post->published_at ? $post->published_at->diffForHumans() : 'Draft' }}</time>
                 </p>
 
                 <div class="flex items-center lg:justify-center text-sm mt-4">
-                    <img src="/images/lary-avatar.svg" alt="Lary avatar">
+                    <img src="/images/{{ $post->author->image ?? 'lary-avatar.svg' }}" alt="{{ $post->author->name }} avatar">
                     <div class="ml-3 text-left">
-                        <h5 class="font-bold">{{ $post['author'] }}</h5>
-                        <h6>Mascot at Laracasts</h6>
+                        <h5 class="font-bold">{{ $post->author->name }}</h5>
+                        <h6>{{ $post->author->bio ?? 'Mascot at Laracasts' }}</h6>
                     </div>
                 </div>
             </div>
@@ -35,20 +35,18 @@
                     </a>
 
                     <div class="space-x-2">
-                        @foreach($post['tags'] as $tag)
-                            <a href="#"
-                               class="px-3 py-1 border border-blue-300 rounded-full text-blue-300 text-xs uppercase font-semibold"
-                               style="font-size: 10px">{{ $tag }}</a>
-                        @endforeach
+                        <a href="/?category={{ $post->category->slug }}"
+                           class="px-3 py-1 border border-{{ $post->category->color }} rounded-full text-{{ $post->category->color }} text-xs uppercase font-semibold"
+                           style="font-size: 10px">{{ $post->category->name }}</a>
                     </div>
                 </div>
 
                 <h1 class="font-bold text-3xl lg:text-4xl mb-10">
-                    {{ $post['title'] }}
+                    {{ $post->title }}
                 </h1>
 
                 <div class="space-y-4 lg:text-lg leading-loose">
-                    {!! $post['body'] !!}
+                    {!! $post->body !!}
                 </div>
             </div>
         </article>
